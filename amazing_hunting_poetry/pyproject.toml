@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "amazing-hunting-poetry"
+version = "0.1.0"
+description = ""
+authors = ["mbgoodguy <you@example.com>"]
+readme = "README.md"
+packages = [{include = "amazing_hunting_poetry"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
