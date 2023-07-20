@@ -30,7 +30,7 @@ class VacanciesView(View):
                 "text": vacancy.text
             })
 
-        return JsonResponse(response, safe=False)
+        return JsonResponse(response, safe=False)  # safe=False - скармливаем данные как есть и говорим отключить проверки
 
     def post(self, request):
         vacancy_data = json.loads(

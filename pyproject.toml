@@ -1,10 +1,9 @@
 [tool.poetry]
-name = "amazing-hunting"
+name = "vacancies"
 version = "0.1.0"
 description = ""
-authors = ["mbgoodguy <you@example.com>"]
+authors = ["mbgoodguy <nerooren4001@gmail.com>"]
 readme = "README.md"
-packages = [{include = "amazing_hunting"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
