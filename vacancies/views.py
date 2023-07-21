@@ -30,11 +30,10 @@ class VacanciesView(View):
                 "text": vacancy.text
             })
 
-        return JsonResponse(response, safe=False)  # safe=False - скармливаем данные как есть и говорим отключить проверки
+        return JsonResponse(response, safe=False, json_dumps_params={"ensure_ascii": False})  # safe=False - скармливаем данные как есть и говорим отключить проверки
 
     def post(self, request):
-        vacancy_data = json.loads(
-            request.body)  # забираем данные. это будут данные из request.body, приведенные к словарю
+        vacancy_data = json.loads(request.body)  # забираем данные. это будут данные из request.body, приведенные к словарю
 
         vacancy = Vacancy()  # создаем инстанс нашей модели
         vacancy.text = vacancy_data["text"]  # в поле text сохраняем то что пришло из данных в поле text
