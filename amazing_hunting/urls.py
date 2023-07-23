@@ -16,14 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from ads.views import root, CategoriesView, AdsView, AdDetailView, CatDetailView
+from ads.views import root
 from vacancies import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', views.hello),
-    path('vacancies/', views.VacanciesView.as_view()),
-    path('vacancy/<int:pk>/', views.VacancyDetailView.as_view()),
+    path('vacancies/', views.VacancyListView.as_view()),
+    path('vacancy/', include('vacancies.urls')),
     path('root/', root),
-    path('', include('ads.urls'))
+    path('', include('ads.urls')),
 ]
