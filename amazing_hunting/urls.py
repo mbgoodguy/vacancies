@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
 from ads.views import root
+from amazing_hunting import settings
 from vacancies import views
 
 urlpatterns = [
@@ -26,4 +28,8 @@ urlpatterns = [
     path('vacancy/', include('vacancies.urls')),
     path('root/', root),
     path('', include('ads.urls')),
+    path('company/', include('companies.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
