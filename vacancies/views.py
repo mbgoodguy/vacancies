@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 
+from amazing_hunting import settings
 from vacancies.models import Vacancy, Skill
 
 
@@ -37,6 +38,25 @@ class VacancyListView(ListView):
         search_text = request.GET.get("text", None)  # добавляем поиск по тексту
         if search_text:
             self.object_list = self.object_list.filter(text=search_text)  # filter - фильтрует наши данные по параметрам
+
+        '''
+        1 - 0 : 10
+        2 - 10 : 20
+        3 - 20 : 30
+        ...
+         
+        '''
+
+        total = self.object_list = self.object_list.count()
+        page_number = int(request.GET.get("page", 1))
+        offset = (page_number - 1) * settings.TOTAL_ON_PAGE
+        if (page_number - 1) * settings.TOTAL_ON_PAGE < total:
+            self.object_list = self.object_list[offset:offset+settings.TOTAL_ON_PAGE]
+        else:
+            self.object_list = self.object_list[offset:offset+total]
+
+
+        self.object_list = self.object_list.order_by('text', 'slug')
 
         response = []
         for vacancy in self.object_list:
