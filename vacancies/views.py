@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Count, Avg
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -79,17 +80,26 @@ class VacancyCreateView(CreateView):
             request.body)  # забираем данные. это будут данные из request.body, приведенные к словарю
 
         vacancy = Vacancy.objects.create(
-            user_id=vacancy_data['user_id'],
             slug=vacancy_data['slug'],
             text=vacancy_data['text'],
             status=vacancy_data['status'],
         )
 
-        vacancy.text = vacancy_data["text"]  # в поле text сохраняем то что пришло из данных в поле text
+        vacancy.user = get_object_or_404(User, pk=vacancy_data['user_id'])
+
+        for skill in vacancy_data['skills']:
+            skill_obj, created = Skill.objects.get_or_create(name=skill, defaults={'is_active': True})
+            vacancy.skills.add(skill_obj)
+        vacancy.save()
 
         return JsonResponse({
             "id": vacancy.id,
-            "text": vacancy.text
+            "text": vacancy.text,
+            "slug": vacancy.slug,
+            "status": vacancy.status,
+            "created": vacancy.created,
+            "user": vacancy.user_id,
+            "skills": list(map(str, vacancy.skills.all()))
         })
 
 
@@ -123,8 +133,7 @@ class VacancyUpdateView(UpdateView):
             "status": self.object.status,
             "created": self.object.created,
             "user": self.object.user_id,
-            "skills": list(self.object.skills.all().values_list("name", flat=True))
-            ,
+            "skills": list(self.object.skills.all().values_list("name", flat=True)),
         })
 
 
