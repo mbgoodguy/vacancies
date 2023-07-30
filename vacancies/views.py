@@ -44,11 +44,11 @@ class VacancyListView(ListView):
         if search_text:
             self.object_list = self.object_list.filter(text=search_text)  # filter - фильтрует наши данные по параметрам
 
+        self.object_list = self.object_list.order_by('text', 'slug')
+
         paginator = Paginator(self.object_list, settings.TOTAL_ON_PAGE)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
-
-        self.object_list = self.object_list.order_by('text', 'slug')
 
         vacancies = []
         for vacancy in page_obj:
@@ -58,7 +58,7 @@ class VacancyListView(ListView):
                 "slug": vacancy.slug,
                 "status": vacancy.status,
                 "created": vacancy.created,
-                "user": vacancy.user_id,
+                "username": vacancy.user.username,
             })
 
         response = {
@@ -99,7 +99,7 @@ class VacancyCreateView(CreateView):
             "status": vacancy.status,
             "created": vacancy.created,
             "user": vacancy.user_id,
-            "skills": list(map(str, vacancy.skills.all()))
+            # "skills": list(map(str, vacancy.skills.all()))
         })
 
 
