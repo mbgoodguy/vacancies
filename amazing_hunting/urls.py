@@ -17,7 +17,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from ads.views import root
+from ads.views import service
 from amazing_hunting import settings
 from vacancies import views
 
@@ -26,7 +26,7 @@ urlpatterns = [
     path('hello/', views.hello),
     path('vacancies/', views.VacancyListView.as_view()),
     path('vacancy/', include('vacancies.urls')),
-    path('root/', root),
+    path('root/', service.health_check),
     path('', include('ads.urls')),
     path('company/', include('companies.urls')),
 ]
